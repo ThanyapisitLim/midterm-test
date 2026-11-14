@@ -75,9 +75,14 @@ export async function findByJoinCode(joinCode: string): Promise<Classroom | null
   return result.rows[0] ?? null;
 }
 
+// ตั้งโค้ดได้ครั้งเดียว: ถ้าห้องนี้มีโค้ดแล้วจะไม่ทำอะไรและคืน false
 // join_code ซ้ำกับห้องอื่นจะ error code 23505 (unique)
-export async function setJoinCode(id: number, joinCode: string) {
-  await pool.query("update classrooms set join_code = $1 where id = $2", [joinCode, id]);
+export async function setJoinCode(id: number, joinCode: string): Promise<boolean> {
+  const result = await pool.query(
+    "update classrooms set join_code = $1 where id = $2 and join_code is null",
+    [joinCode, id]
+  );
+  return result.rowCount === 1;
 }
 
 export async function addStudent(classroomId: number, studentId: number) {

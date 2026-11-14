@@ -107,7 +107,7 @@ export async function getClassroom(req: Request, res: Response) {
   }
 }
 
-// POST /api/classrooms/:id/join-code  สร้างโค้ดเข้าห้องใหม่ (โค้ดเดิมใช้ไม่ได้อีก)
+// POST /api/classrooms/:id/join-code  สร้างโค้ดเข้าห้อง (สร้างได้ครั้งเดียว)
 export async function generateJoinCode(req: Request, res: Response) {
   try {
     const id = Number(req.params.id);
@@ -117,12 +117,20 @@ export async function generateJoinCode(req: Request, res: Response) {
       res.status(404).json({ error: "ไม่พบห้องเรียน" });
       return;
     }
+    if (classroom.join_code) {
+      res.status(409).json({ error: "ห้องนี้สร้างโค้ดไปแล้ว" });
+      return;
+    }
 
     // สุ่มได้โค้ดซ้ำกับห้องอื่นจะชน unique แล้วลองใหม่
     for (let i = 0; i < 5; i++) {
       const code = makeJoinCode();
       try {
-        await Classroom.setJoinCode(classroom.id, code);
+        const saved = await Classroom.setJoinCode(classroom.id, code);
+        if (!saved) {
+          res.status(409).json({ error: "ห้องนี้สร้างโค้ดไปแล้ว" });
+          return;
+        }
         res.json({ join_code: code });
         return;
       } catch (err) {
