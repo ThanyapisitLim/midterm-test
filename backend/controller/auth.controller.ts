@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import bcrypt from "bcryptjs";
+import { env } from "../config/env";
 import * as RefreshToken from "../model/refresh-token.model";
 import * as User from "../model/user.model";
 import {
@@ -57,7 +58,7 @@ export async function register(req: Request, res: Response) {
       return;
     }
 
-    const passwordHash = await bcrypt.hash(password, 10);
+    const passwordHash = await bcrypt.hash(password, env.bcryptRounds);
     const user = await User.create(role, studentCode, fullName, passwordHash);
 
     await startSession(res, user);

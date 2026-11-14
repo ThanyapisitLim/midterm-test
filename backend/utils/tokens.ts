@@ -10,8 +10,8 @@ export interface AuthUser {
 
 export const ACCESS_COOKIE = "access_token";
 export const REFRESH_COOKIE = "refresh_token";
-const ACCESS_SECONDS = 15 * 60;
-const REFRESH_SECONDS = 7 * 24 * 60 * 60;
+const ACCESS_SECONDS = env.accessTokenSeconds;
+const REFRESH_SECONDS = env.refreshTokenSeconds;
 
 export function signAccessToken(user: AuthUser): string {
   return jwt.sign({ id: user.id, role: user.role }, env.jwtAccessSecret, { expiresIn: ACCESS_SECONDS });
