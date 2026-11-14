@@ -1,0 +1,13 @@
+{
+  "name": "qr-attendance-frontend",
+  "scripts": {
+    "build": "tailwindcss -i ./src/input.css -o ./output.css --minify",
+    "dev": "tailwindcss -i ./src/input.css -o ./output.css --watch=always"
+  },
+  "type": "commonjs",
+  "private": true,
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.5",
+    "tailwindcss": "^4.3.5"
+  }
+}

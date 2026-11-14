@@ -1,0 +1,7 @@
+.neon
+node_modules/
+.env
+.env*.local
+.vercel
+dist/
+frontend/output.css
