@@ -11,4 +11,9 @@ export const env = {
   refreshTokenSeconds: Number(process.env.REFRESH_TOKEN_SECONDS ?? 604800),
   bcryptRounds: Number(process.env.BCRYPT_ROUNDS ?? 10),
   joinCodeLength: Number(process.env.JOIN_CODE_LENGTH ?? 6),
+  checkinStartDelaySeconds: Number(process.env.CHECKIN_START_DELAY_SECONDS ?? 3),
+  checkinCodeSeconds: Number(process.env.CHECKIN_CODE_SECONDS ?? 15),
+  checkinDurationSeconds: Number(process.env.CHECKIN_DURATION_SECONDS ?? 180),
+  checkinGraceSeconds: Number(process.env.CHECKIN_GRACE_SECONDS ?? 10),
+  checkinCodeLength: Number(process.env.CHECKIN_CODE_LENGTH ?? 6),
 };
