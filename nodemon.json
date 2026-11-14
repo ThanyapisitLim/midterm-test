@@ -1,0 +1,12 @@
+{
+  "watch": [
+    ".",
+    ".env.local"
+  ],
+  "ext": "ts,json,sql",
+  "ignore": [
+    "node_modules/**",
+    "dist/**"
+  ],
+  "exec": "tsx --env-file=.env.local index.ts"
+}

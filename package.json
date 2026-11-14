@@ -14,13 +14,14 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^26.6.6",
     "@types/pg": "^8.23.1",
+    "nodemon": "^3.1.14",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   },
   "name": "qr-attendance-backend",
   "private": true,
   "scripts": {
-    "dev": "tsx watch --env-file=.env.local index.ts",
+    "dev": "nodemon",
     "build": "tsc",
     "start": "node --env-file-if-exists=.env.local dist/index.js",
     "db:migrate": "tsx --env-file=.env.local database/migrate.ts"
