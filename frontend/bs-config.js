@@ -1,9 +1,6 @@
-// npx browser-sync start --config bs-config.js
+// npx browser-sync start --config bs-config.js  (ต้องรัน backend ที่พอร์ต 8000 ค้างไว้ด้วย)
 module.exports = {
-  server: {
-    baseDir: "src",
-    serveStaticOptions: { extensions: ["html"] },
-  },
+  proxy: "localhost:8000",
   files: ["src/**/*"],
   notify: false,
   open: false,
