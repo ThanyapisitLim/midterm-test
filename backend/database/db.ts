@@ -10,3 +10,8 @@ if (!connectionString) {
 }
 
 export const pool = new Pool({ connectionString, max: 5 });
+
+// Neon ตัด connection ที่ว่างนาน ๆ ทิ้ง ถ้าไม่ดัก error นี้ server จะ crash
+pool.on("error", (err) => {
+  console.error("Idle Postgres client error:", err.message);
+});
