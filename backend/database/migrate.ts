@@ -2,7 +2,6 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { pool } from "./db";
 
-// สร้าง/ปรับตารางทั้งหมดตาม schema.sql  รัน: npm run db:migrate
 async function migrate() {
   const sql = readFileSync(path.join(__dirname, "schema.sql"), "utf8");
   await pool.query(sql);

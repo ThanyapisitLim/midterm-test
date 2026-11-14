@@ -1,8 +1,5 @@
 import { Pool } from "pg";
 
-// DATABASE_URL มาจาก .env.local (ได้จาก `neon deploy`) ตอนรันในเครื่อง
-// ส่วนบน Vercel ให้ตั้งใน Environment Variables ของโปรเจกต์
-// ใช้ตัวที่เป็น pooled (host มี -pooler) เพราะ serverless เปิด connection ใหม่บ่อย
 const connectionString = process.env.DATABASE_URL;
 
 if (!connectionString) {
@@ -11,7 +8,7 @@ if (!connectionString) {
 
 export const pool = new Pool({ connectionString, max: 5 });
 
-// Neon ตัด connection ที่ว่างนาน ๆ ทิ้ง ถ้าไม่ดัก error นี้ server จะ crash
+// Neon ตัด connection ที่ว่างนานทิ้ง ถ้าไม่ดัก error นี้ server จะ crash
 pool.on("error", (err) => {
   console.error("Idle Postgres client error:", err.message);
 });

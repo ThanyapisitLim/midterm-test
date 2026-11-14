@@ -1,6 +1,5 @@
-import type { AuthUser } from "./models";
+import type { AuthUser } from "../utils/tokens";
 
-// เพิ่ม field ให้ req ของ Express: requireAuth ใส่ไว้ แล้ว controller ดึงไปใช้ต่อ
 declare global {
   namespace Express {
     interface Request {
