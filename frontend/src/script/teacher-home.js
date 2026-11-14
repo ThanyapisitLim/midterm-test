@@ -1,4 +1,4 @@
-import { api, escapeHtml, hideError, initNavbar, showError } from "/script/common.js";
+import { api, escapeHtml, hideError, initNavbar, requireLogin, showError } from "/script/common.js";
 
 const list = document.getElementById("classroom-list");
 const empty = document.getElementById("empty");
@@ -7,7 +7,8 @@ const form = document.getElementById("create-form");
 const createError = document.getElementById("create-error");
 const createBtn = document.getElementById("create-btn");
 
-initNavbar();
+const user = await requireLogin("teacher");
+initNavbar(user);
 
 function render(classrooms) {
   empty.classList.toggle("hidden", classrooms.length > 0);
