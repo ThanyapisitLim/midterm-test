@@ -17,6 +17,57 @@ async function startSession(res: Response, user: { id: number; role: "teacher" |
   setAuthCookies(res, signAccessToken(user), refresh.token);
 }
 
+// POST /api/auth/register  { role, fullName, studentCode, password, confirmPassword }
+export async function register(req: Request, res: Response) {
+  try {
+    const body = req.body ?? {};
+    const role = body.role;
+    const fullName = typeof body.fullName === "string" ? body.fullName.trim() : "";
+    const studentCode = typeof body.studentCode === "string" ? body.studentCode.trim() : "";
+    const password = typeof body.password === "string" ? body.password : "";
+    const confirmPassword = typeof body.confirmPassword === "string" ? body.confirmPassword : "";
+
+    // กติกาต้องตรงกับ frontend/src/script/register.js
+    const details: Record<string, string> = {};
+
+    if (role !== "student" && role !== "teacher") details.role = "กรุณาเลือกประเภทผู้ใช้";
+
+    if (!fullName) details.fullName = "กรุณากรอกชื่อ-นามสกุล";
+    else if (fullName.length > 100) details.fullName = "ชื่อยาวเกิน 100 ตัวอักษร";
+
+    if (role === "teacher") {
+      if (!/^[A-Za-z0-9]{3,20}$/.test(studentCode)) details.studentCode = "รหัสอาจารย์ใช้ตัวอักษรหรือตัวเลข 3-20 ตัว";
+    } else if (!/^\d{8,12}$/.test(studentCode)) {
+      details.studentCode = "รหัสนักศึกษาต้องเป็นตัวเลข 8-12 หลัก";
+    }
+
+    if (password.length < 8) details.password = "รหัสผ่านต้องยาวอย่างน้อย 8 ตัว";
+    else if (password.length > 72) details.password = "รหัสผ่านยาวเกินไป (ไม่เกิน 72 ตัว)";
+    else if (!/[A-Za-z]/.test(password) || !/\d/.test(password)) details.password = "ต้องมีทั้งตัวอักษรและตัวเลข";
+
+    if (confirmPassword !== password) details.confirmPassword = "รหัสผ่านไม่ตรงกัน";
+
+    if (Object.keys(details).length > 0) {
+      res.status(400).json({ error: "ข้อมูลไม่ถูกต้อง", details });
+      return;
+    }
+
+    if (await User.findByCode(studentCode)) {
+      res.status(409).json({ error: "รหัสนี้ถูกใช้แล้ว", details: { studentCode: "รหัสนี้ถูกใช้แล้ว" } });
+      return;
+    }
+
+    const passwordHash = await bcrypt.hash(password, 10);
+    const user = await User.create(role, studentCode, fullName, passwordHash);
+
+    await startSession(res, user);
+    res.status(201).json({ user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "เกิดข้อผิดพลาดในระบบ" });
+  }
+}
+
 // POST /api/auth/login  { studentCode, password }
 export async function login(req: Request, res: Response) {
   try {
