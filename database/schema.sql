@@ -1,5 +1,3 @@
--- รันซ้ำได้ ไม่ลบข้อมูลเดิม: npm run db:migrate
-
 create table if not exists users (
   id            integer generated always as identity primary key,
   role          text not null check (role in ('teacher', 'student')),
@@ -33,43 +31,53 @@ create table if not exists enrollments (
   primary key (classroom_id, student_id)
 );
 
--- ended_at เป็น null = ยังเปิดเช็คชื่ออยู่
+-- เริ่มเช็คชื่อ 1 ครั้ง (1 คาบ) ends_at = เวลาที่รหัสสุดท้ายหมด  ended_at เป็น null = ยังไม่ได้ประเมินผล
 create table if not exists checkin_sessions (
   id           integer generated always as identity primary key,
   classroom_id integer not null references classrooms(id) on delete cascade,
   started_at   timestamptz not null default now(),
+  ends_at      timestamptz not null,
   ended_at     timestamptz
 );
 create unique index if not exists one_open_session_per_classroom
   on checkin_sessions (classroom_id) where ended_at is null;
 
--- เก็บ QR ทุกอันที่เคยแสดง เพื่อแยก "หมดอายุ" ออกจาก "ไม่มีอยู่จริง"
-create table if not exists qr_tokens (
+-- รหัส 6 หลักที่สร้างรอไว้ทั้งคาบ แต่ละตัวมีช่วงเวลาที่ถูกโชว์ (starts_at ถึง expires_at)
+-- รหัสซ้ำกันได้ถ้าอยู่คนละคาบ
+create table if not exists check_codes (
   id                 integer generated always as identity primary key,
   checkin_session_id integer not null references checkin_sessions(id) on delete cascade,
-  token              text not null unique,
-  created_at         timestamptz not null default now(),
-  expires_at         timestamptz not null
+  code               text not null,
+  starts_at          timestamptz not null,
+  expires_at         timestamptz not null,
+  unique (checkin_session_id, code)
 );
-create index if not exists qr_tokens_session_expires_idx
-  on qr_tokens (checkin_session_id, expires_at desc);
+create index if not exists check_codes_session_starts_idx
+  on check_codes (checkin_session_id, starts_at);
 
+-- ทุกครั้งที่นิสิตกรอกรหัส (code_id เป็น null ถ้ารหัสไม่มีอยู่ในคาบนี้) ไว้ให้ตัดสินตอนจบคาบ
+create table if not exists checkin_logs (
+  id                 integer generated always as identity primary key,
+  checkin_session_id integer not null references checkin_sessions(id) on delete cascade,
+  student_id         integer not null references users(id) on delete cascade,
+  code               text not null,
+  code_id            integer references check_codes(id) on delete set null,
+  device_id          text,
+  submitted_at       timestamptz not null default now()
+);
+create index if not exists checkin_logs_session_student_idx
+  on checkin_logs (checkin_session_id, student_id);
+create index if not exists checkin_logs_session_device_idx
+  on checkin_logs (checkin_session_id, device_id);
+
+-- ผลสุดท้ายของแต่ละคน สร้างตอนจบคาบ (ไม่มีแถว = ขาด)
 create table if not exists attendance (
   id                 integer generated always as identity primary key,
   checkin_session_id integer not null references checkin_sessions(id) on delete cascade,
   student_id         integer not null references users(id) on delete cascade,
-  qr_token_id        integer references qr_tokens(id) on delete set null,
-  device_id          text,
+  log_id             integer references checkin_logs(id) on delete set null,
   status             text not null check (status in ('present', 'suspicious', 'rejected')),
   flag_reason        text,
   checked_at         timestamptz not null default now(),
   unique (checkin_session_id, student_id)
 );
-create index if not exists attendance_session_device_idx
-  on attendance (checkin_session_id, device_id);
-
--- ปรับตารางที่สร้างไว้จากเวอร์ชันแรกให้ตรงกับด้านบน
-alter table users drop column if exists email;
-alter table users drop constraint if exists users_check;
-alter table users alter column student_code set not null;
-alter table refresh_tokens drop column if exists revoked_at;
