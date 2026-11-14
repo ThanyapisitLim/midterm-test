@@ -4,7 +4,7 @@ if (!process.env.JWT_ACCESS_SECRET || !process.env.JWT_REFRESH_SECRET) {
 
 export const env = {
   isProduction: process.env.NODE_ENV === "production",
-  port: Number(process.env.PORT ?? 8000),
+  port: Number(process.env.PORT ?? 3000),
   jwtAccessSecret: process.env.JWT_ACCESS_SECRET,
   jwtRefreshSecret: process.env.JWT_REFRESH_SECRET,
   accessTokenSeconds: Number(process.env.ACCESS_TOKEN_SECONDS ?? 900),
