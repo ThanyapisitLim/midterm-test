@@ -9,7 +9,6 @@ const createBtn = document.getElementById("create-btn");
 
 initNavbar();
 
-// GET /api/classrooms → { classrooms: [{ id, name, student_count }] }
 function render(classrooms) {
   empty.classList.toggle("hidden", classrooms.length > 0);
   list.innerHTML = classrooms
@@ -35,7 +34,6 @@ async function load() {
   }
 }
 
-// POST /api/classrooms  body: { name }
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   createError.textContent = "";

@@ -2,7 +2,6 @@ const form = document.getElementById("login-form");
 const formError = document.getElementById("form-error");
 const submitBtn = document.getElementById("submit-btn");
 
-// ปุ่มรูปตา: สลับให้เห็นรหัสผ่านหรือซ่อน
 const passwordInput = document.getElementById("password");
 const togglePassword = document.getElementById("toggle-password");
 togglePassword.addEventListener("click", () => {
@@ -31,7 +30,6 @@ function setFieldError(name, message) {
   document.getElementById(`${name}-error`).textContent = message;
 }
 
-// ตรวจฝั่ง client เพื่อบอกผู้ใช้ทันที (server ต้องตรวจซ้ำอีกรอบเสมอ)
 function validate(studentCode, password) {
   const errors = {};
   if (!studentCode) errors.studentCode = "กรุณากรอกรหัสนักศึกษาหรือรหัสอาจารย์";
@@ -39,7 +37,7 @@ function validate(studentCode, password) {
   return errors;
 }
 
-// ?next=/path ใช้กลับไปหน้าเดิมหลัง login ยอมรับเฉพาะ path ในเว็บเรา กันถูกส่งไปเว็บอื่น (open redirect)
+// รับเฉพาะ path ในเว็บเรา กันถูกส่งไปเว็บอื่น (open redirect)
 function getNextPath() {
   const next = new URLSearchParams(location.search).get("next");
   return next && next.startsWith("/") && !next.startsWith("//") ? next : null;
@@ -70,7 +68,6 @@ form.addEventListener("submit", async (event) => {
       return;
     }
 
-    // JWT ถูกตั้งเป็น httpOnly cookie โดย server แล้ว ฝั่งนี้ไม่ต้องเก็บอะไร
     location.href = getNextPath() ?? (data.user.role === "teacher" ? "/teacher" : "/student");
   } catch {
     showFormError("เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ กรุณาลองใหม่");

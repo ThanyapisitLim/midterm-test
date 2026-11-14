@@ -9,7 +9,6 @@ const joinBtn = document.getElementById("join-btn");
 
 initNavbar();
 
-// GET /api/classrooms → { classrooms: [{ id, name, teacher_name }] }
 function render(classrooms) {
   empty.classList.toggle("hidden", classrooms.length > 0);
   list.innerHTML = classrooms
@@ -35,7 +34,6 @@ async function load() {
   }
 }
 
-// POST /api/classrooms/join  body: { joinCode }
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   joinError.textContent = "";

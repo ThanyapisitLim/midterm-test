@@ -3,7 +3,6 @@ const formError = document.getElementById("form-error");
 const submitBtn = document.getElementById("submit-btn");
 const FIELDS = ["fullName", "studentCode", "password", "confirmPassword"];
 
-// เลือกอาจารย์/นักศึกษา แล้วป้ายชื่อช่องรหัสเปลี่ยนตาม (รหัสอาจารย์ไม่จำเป็นต้องเป็นตัวเลขล้วน)
 const codeLabel = document.getElementById("code-label");
 function updateRoleUi() {
   const isTeacher = form.elements.role.value === "teacher";
@@ -31,7 +30,6 @@ function setFieldError(name, message) {
   if (slot) slot.textContent = message;
 }
 
-// ตรวจฝั่ง client เพื่อบอกผู้ใช้ทันที (server ต้องตรวจซ้ำอีกรอบเสมอ และกติกาต้องตรงกัน)
 function validate(v) {
   const errors = {};
 
@@ -61,7 +59,7 @@ form.addEventListener("submit", async (event) => {
   clearErrors();
 
   const values = {
-    role: form.elements.role.value, // "student" | "teacher"
+    role: form.elements.role.value,
     fullName: form.elements.fullName.value.trim(),
     studentCode: form.elements.studentCode.value.trim(),
     password: form.elements.password.value,
@@ -82,7 +80,6 @@ form.addEventListener("submit", async (event) => {
     const data = await res.json().catch(() => ({}));
 
     if (!res.ok) {
-      // server ตอบ details เป็น { ชื่อช่อง: ข้อความ } เช่น { studentCode: "รหัสนักศึกษานี้ถูกใช้แล้ว" } แสดงใต้ช่องนั้นเลย
       if (data.details && typeof data.details === "object") {
         for (const [name, message] of Object.entries(data.details)) setFieldError(name, message);
       } else {
@@ -91,7 +88,6 @@ form.addEventListener("submit", async (event) => {
       return;
     }
 
-    // server สมัครแล้วตั้ง cookie login ให้เลย แยกหน้าตาม role เหมือนตอน login
     const role = data.user?.role ?? values.role;
     location.href = role === "teacher" ? "/teacher" : "/student";
   } catch {
