@@ -14,7 +14,7 @@ app.use("/api", (_req, res) => {
   res.status(404).json({ error: "ไม่พบ API นี้" });
 });
 
-// ในเครื่อง backend เสิร์ฟหน้าเว็บด้วย จะได้อยู่พอร์ตเดียวกับ API (cookie ผูกกับพอร์ต)
+// ในเครื่อง backend เสิร์ฟหน้าเว็บด้วย จะได้อยู่ origin เดียวกับ API (เรียก /api ได้เลย ไม่ต้องตั้ง CORS)
 if (!process.env.VERCEL) {
   const publicDir = path.resolve(process.cwd(), "../frontend/src");
   app.use(express.static(publicDir, { extensions: ["html"] }));
