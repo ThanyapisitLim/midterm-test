@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ห้องเรียน · เช็คชื่อเข้าเรียน</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/output.css">
+</head>
+<body class="invisible min-h-dvh bg-zinc-950 font-sans text-zinc-100">
+  <header class="border-b border-zinc-800 bg-zinc-900/60">
+    <div class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3">
+      <div class="flex items-center gap-3">
+        <div class="h-5 w-1 rounded-full bg-swu-red"></div>
+        <span class="text-sm font-medium">เช็คชื่อเข้าเรียน</span>
+      </div>
+      <div class="flex items-center gap-4 text-sm">
+        <span id="nav-name" class="hidden text-zinc-400 sm:inline"></span>
+        <button id="logout-btn" type="button" class="rounded-lg px-3 py-1.5 text-zinc-300 ring-1 ring-zinc-700 transition hover:bg-zinc-800">ออกจากระบบ</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-5xl space-y-8 px-4 py-8">
+    <a href="/student" class="text-sm text-zinc-400 transition hover:text-white">← ห้องเรียนทั้งหมด</a>
+
+    <div>
+      <p id="teacher-name" class="text-xs text-swu-grey"></p>
+      <h1 id="classroom-name" class="mt-1 text-2xl font-semibold"></h1>
+    </div>
+
+    <p id="page-error" class="hidden rounded-lg bg-red-500/10 px-4 py-3 text-sm text-red-200 ring-1 ring-red-400/30" role="alert"></p>
+  </main>
+
+  <script type="module" src="/script/student-classroom.js"></script>
+</body>
+</html>

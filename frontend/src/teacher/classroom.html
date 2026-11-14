@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ห้องเรียน · เช็คชื่อเข้าเรียน</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/output.css">
+</head>
+<body class="invisible min-h-dvh bg-zinc-950 font-sans text-zinc-100">
+  <header class="border-b border-zinc-800 bg-zinc-900/60">
+    <div class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3">
+      <div class="flex items-center gap-3">
+        <div class="h-5 w-1 rounded-full bg-swu-red"></div>
+        <span class="text-sm font-medium">เช็คชื่อเข้าเรียน</span>
+      </div>
+      <div class="flex items-center gap-4 text-sm">
+        <span id="nav-name" class="hidden text-zinc-400 sm:inline"></span>
+        <button id="logout-btn" type="button" class="rounded-lg px-3 py-1.5 text-zinc-300 ring-1 ring-zinc-700 transition hover:bg-zinc-800">ออกจากระบบ</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-5xl space-y-8 px-4 py-8">
+    <a href="/teacher" class="text-sm text-zinc-400 transition hover:text-white">← ห้องเรียนทั้งหมด</a>
+
+    <div>
+      <p class="text-xs text-swu-grey">ห้องเรียน</p>
+      <h1 id="classroom-name" class="mt-1 text-2xl font-semibold"></h1>
+    </div>
+
+    <p id="page-error" class="hidden rounded-lg bg-red-500/10 px-4 py-3 text-sm text-red-200 ring-1 ring-red-400/30" role="alert"></p>
+
+    <section class="rounded-xl border border-zinc-800 bg-zinc-900 p-5">
+      <p class="text-sm text-zinc-400">โค้ดเข้าห้องเรียน</p>
+      <div class="mt-2 flex flex-wrap items-center gap-4">
+        <p id="join-code" class="font-mono text-3xl tracking-widest">–</p>
+        <button id="generate-btn" type="button"
+          class="rounded-lg bg-swu-red px-5 py-2.5 text-sm font-medium text-white transition hover:bg-swu-red-dark focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50">
+          สร้างโค้ด
+        </button>
+      </div>
+      <p class="mt-3 text-xs text-zinc-500">สร้างโค้ดใหม่แล้ว โค้ดเดิมจะใช้ไม่ได้ ส่วนนิสิตที่เข้าห้องไปแล้วยังอยู่เหมือนเดิม</p>
+      <p id="code-error" class="mt-1.5 text-xs text-red-300"></p>
+    </section>
+
+    <section>
+      <h2 class="mb-3 font-medium">นิสิตในห้อง <span id="student-count" class="text-zinc-500"></span></h2>
+      <div class="overflow-x-auto rounded-xl border border-zinc-800">
+        <table class="w-full text-left text-sm">
+          <thead class="border-b border-zinc-800 bg-zinc-900 text-zinc-400">
+            <tr>
+              <th class="px-4 py-3 font-medium">รหัสนักศึกษา</th>
+              <th class="px-4 py-3 font-medium">ชื่อ-นามสกุล</th>
+            </tr>
+          </thead>
+          <tbody id="student-rows" class="divide-y divide-zinc-800"></tbody>
+        </table>
+      </div>
+      <p id="empty" class="mt-3 hidden text-center text-sm text-zinc-500">
+        ยังไม่มีนิสิตในห้องนี้ สร้างโค้ดแล้วให้นิสิตกรอกที่หน้าหลัก
+      </p>
+    </section>
+  </main>
+
+  <script type="module" src="/script/teacher-classroom.js"></script>
+</body>
+</html>
