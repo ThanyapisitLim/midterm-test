@@ -137,6 +137,41 @@ export async function refresh(req: Request, res: Response) {
   }
 }
 
+// GET /api/auth/refresh-redirect?next=/teacher  ต่ออายุ session แล้ว redirect กลับหน้าเดิม
+// ใช้กับหน้าที่ render ที่ server: refresh cookie ถูกส่งเฉพาะ /api/auth จึงต้องผ่านทางนี้
+export async function refreshRedirect(req: Request, res: Response) {
+  // รับเฉพาะ path ในเว็บเรา กันถูกส่งไปเว็บอื่น (open redirect)
+  const next = typeof req.query.next === "string" && /^\/(?![/\\])/.test(req.query.next) ? req.query.next : "/";
+
+  const fail = () => {
+    clearAuthCookies(res);
+    res.redirect(`/?next=${encodeURIComponent(next)}`);
+  };
+
+  try {
+    const token = req.cookies?.[REFRESH_COOKIE];
+    if (!token) return fail();
+
+    let claims;
+    try {
+      claims = verifyRefreshToken(token);
+    } catch {
+      return fail();
+    }
+
+    if (!(await RefreshToken.remove(claims.jti))) return fail();
+
+    const user = await User.findById(claims.userId);
+    if (!user) return fail();
+
+    await startSession(res, user);
+    res.redirect(next);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("เกิดข้อผิดพลาดในระบบ");
+  }
+}
+
 // POST /api/auth/logout
 export async function logout(req: Request, res: Response) {
   try {

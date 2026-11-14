@@ -4,4 +4,4 @@ node_modules/
 .env*.local
 .vercel
 dist/
-frontend/src/output.css
+public/output.css

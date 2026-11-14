@@ -1,4 +1,6 @@
-@import "tailwindcss";
+@import "tailwindcss" source(none);
+@source "../views";
+@source "../public/script";
 
 @theme {
   --font-sans: "IBM Plex Sans Thai", system-ui, sans-serif;
@@ -6,13 +8,13 @@
   /* ค่าประมาณ ยังไม่มีรหัสสี CI ทางการของ มศว */
   --color-swu-red: #c8102e;
   --color-swu-red-dark: #a30d25;
-  --color-swu-grey: #a1a4a9;
+  --color-swu-grey: #6b6f75;
 }
 
-/* เลข 0.6 คือความมืดของชั้นสีดำทับรูป (0-1) */
+/* เลข 0.25 คือความมืดของชั้นสีดำทับรูป (0-1) */
 .login-bg {
   background:
-    linear-gradient(rgb(0 0 0 / 0.6), rgb(0 0 0 / 0.6)),
+    linear-gradient(rgb(0 0 0 / 0.25), rgb(0 0 0 / 0.25)),
     url("/img/swu.jpg") center / cover no-repeat fixed,
-    #18181b;
+    #d4d4d8;
 }

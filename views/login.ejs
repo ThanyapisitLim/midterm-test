@@ -1,0 +1,51 @@
+<%- include('partials/head', { title }) %>
+<body class="login-bg grid min-h-dvh place-items-center px-4 py-10 font-sans text-zinc-900">
+  <main class="w-full max-w-sm rounded-2xl border border-white/70 bg-white/90 p-8 shadow-2xl backdrop-blur-md">
+    <header class="mb-8">
+      <div class="mb-4 h-1 w-10 rounded-full bg-swu-red"></div>
+      <p class="text-xs text-swu-grey">มหาวิทยาลัยศรีนครินทรวิโรฒ</p>
+      <h1 class="mt-1 text-2xl font-semibold">เช็คชื่อเข้าเรียน</h1>
+    </header>
+
+    <form id="login-form" class="space-y-5" novalidate>
+      <p id="form-error" class="hidden rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 ring-1 ring-red-200" role="alert"></p>
+
+      <div>
+        <label for="studentCode" class="mb-1.5 block text-sm text-zinc-700">รหัสนักศึกษา / รหัสอาจารย์</label>
+        <input id="studentCode" name="studentCode" autocomplete="username" inputmode="numeric"
+          class="block w-full rounded-lg border border-zinc-300 bg-white px-4 py-2.5 text-sm text-zinc-900 focus:border-swu-red focus:ring-2 focus:ring-swu-red/30 focus:outline-none aria-invalid:border-red-500">
+        <p id="studentCode-error" class="mt-1.5 text-xs text-red-600"></p>
+      </div>
+
+      <div>
+        <label for="password" class="mb-1.5 block text-sm text-zinc-700">รหัสผ่าน</label>
+        <div class="relative">
+          <input id="password" name="password" type="password" autocomplete="current-password"
+            class="block w-full rounded-lg border border-zinc-300 bg-white py-2.5 pr-11 pl-4 text-sm text-zinc-900 focus:border-swu-red focus:ring-2 focus:ring-swu-red/30 focus:outline-none aria-invalid:border-red-500">
+          <button id="toggle-password" type="button" aria-label="แสดงรหัสผ่าน" aria-pressed="false"
+            class="absolute inset-y-0 right-3 grid place-items-center text-zinc-400 hover:text-zinc-700">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="size-5" aria-hidden="true">
+              <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
+              <circle cx="12" cy="12" r="3" />
+              <path id="eye-slash" d="M4 4l16 16" class="hidden" />
+            </svg>
+          </button>
+        </div>
+        <p id="password-error" class="mt-1.5 text-xs text-red-600"></p>
+      </div>
+
+      <button id="submit-btn" type="submit"
+        class="w-full rounded-lg bg-swu-red px-4 py-2.5 text-sm font-medium text-white transition hover:bg-swu-red-dark focus-visible:ring-2 focus-visible:ring-swu-red/40 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50">
+        เข้าสู่ระบบ
+      </button>
+    </form>
+
+    <p class="mt-6 text-sm text-zinc-600">
+      ยังไม่มีบัญชี? <a href="/register" class="text-zinc-900 underline underline-offset-4 hover:text-swu-red">สมัครสมาชิก</a>
+    </p>
+  </main>
+
+  <script src="/script/login.js"></script>
+  <script type="module" src="/script/guest.js"></script>
+</body>
+</html>

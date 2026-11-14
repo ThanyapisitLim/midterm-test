@@ -1,0 +1,68 @@
+<%- include('partials/head', { title }) %>
+<body class="login-bg grid min-h-dvh place-items-center px-4 py-10 font-sans text-zinc-900">
+  <main class="w-full max-w-sm rounded-2xl border border-white/70 bg-white/90 p-8 shadow-2xl backdrop-blur-md">
+    <header class="mb-8">
+      <div class="mb-4 h-1 w-10 rounded-full bg-swu-red"></div>
+      <p class="text-xs text-swu-grey">มหาวิทยาลัยศรีนครินทรวิโรฒ</p>
+      <h1 class="mt-1 text-2xl font-semibold">สมัครสมาชิก</h1>
+    </header>
+
+    <form id="register-form" class="space-y-5" novalidate>
+      <p id="form-error" class="hidden rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 ring-1 ring-red-200" role="alert"></p>
+
+      <fieldset class="grid grid-cols-2 gap-1 rounded-lg bg-zinc-100 p-1 ring-1 ring-zinc-200">
+        <legend class="sr-only">สมัครในฐานะ</legend>
+        <label class="cursor-pointer">
+          <input type="radio" name="role" value="student" class="peer sr-only" checked>
+          <span class="block rounded-md py-2 text-center text-sm text-zinc-600 transition peer-checked:bg-swu-red peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-swu-red/40">นักศึกษา</span>
+        </label>
+        <label class="cursor-pointer">
+          <input type="radio" name="role" value="teacher" class="peer sr-only">
+          <span class="block rounded-md py-2 text-center text-sm text-zinc-600 transition peer-checked:bg-swu-red peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-swu-red/40">อาจารย์</span>
+        </label>
+      </fieldset>
+
+      <div>
+        <label for="fullName" class="mb-1.5 block text-sm text-zinc-700">ชื่อ-นามสกุล</label>
+        <input id="fullName" name="fullName" autocomplete="name" maxlength="100"
+          class="block w-full rounded-lg border border-zinc-300 bg-white px-4 py-2.5 text-sm text-zinc-900 focus:border-swu-red focus:ring-2 focus:ring-swu-red/30 focus:outline-none aria-invalid:border-red-500">
+        <p id="fullName-error" class="mt-1.5 text-xs text-red-600"></p>
+      </div>
+
+      <div>
+        <label id="code-label" for="studentCode" class="mb-1.5 block text-sm text-zinc-700">รหัสนักศึกษา</label>
+        <input id="studentCode" name="studentCode" autocomplete="username" inputmode="numeric"
+          class="block w-full rounded-lg border border-zinc-300 bg-white px-4 py-2.5 text-sm text-zinc-900 focus:border-swu-red focus:ring-2 focus:ring-swu-red/30 focus:outline-none aria-invalid:border-red-500">
+        <p id="studentCode-error" class="mt-1.5 text-xs text-red-600"></p>
+      </div>
+
+      <div>
+        <label for="password" class="mb-1.5 block text-sm text-zinc-700">รหัสผ่าน</label>
+        <input id="password" name="password" type="password" autocomplete="new-password"
+          class="block w-full rounded-lg border border-zinc-300 bg-white px-4 py-2.5 text-sm text-zinc-900 focus:border-swu-red focus:ring-2 focus:ring-swu-red/30 focus:outline-none aria-invalid:border-red-500">
+        <p class="mt-1.5 text-xs text-zinc-500">อย่างน้อย 8 ตัว มีทั้งตัวอักษรและตัวเลข</p>
+        <p id="password-error" class="mt-1 text-xs text-red-600"></p>
+      </div>
+
+      <div>
+        <label for="confirmPassword" class="mb-1.5 block text-sm text-zinc-700">ยืนยันรหัสผ่าน</label>
+        <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password"
+          class="block w-full rounded-lg border border-zinc-300 bg-white px-4 py-2.5 text-sm text-zinc-900 focus:border-swu-red focus:ring-2 focus:ring-swu-red/30 focus:outline-none aria-invalid:border-red-500">
+        <p id="confirmPassword-error" class="mt-1.5 text-xs text-red-600"></p>
+      </div>
+
+      <button id="submit-btn" type="submit"
+        class="w-full rounded-lg bg-swu-red px-4 py-2.5 text-sm font-medium text-white transition hover:bg-swu-red-dark focus-visible:ring-2 focus-visible:ring-swu-red/40 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50">
+        สมัครสมาชิก
+      </button>
+    </form>
+
+    <p class="mt-6 text-sm text-zinc-600">
+      มีบัญชีแล้ว? <a href="/" class="text-zinc-900 underline underline-offset-4 hover:text-swu-red">เข้าสู่ระบบ</a>
+    </p>
+  </main>
+
+  <script src="/script/register.js"></script>
+  <script type="module" src="/script/guest.js"></script>
+</body>
+</html>

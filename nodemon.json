@@ -6,7 +6,9 @@
   "ext": "ts,json,sql",
   "ignore": [
     "node_modules/**",
-    "dist/**"
+    "dist/**",
+    "public/**",
+    "views/**"
   ],
   "exec": "tsx --env-file=.env.local index.ts"
 }

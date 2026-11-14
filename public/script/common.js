@@ -52,23 +52,8 @@ export async function api(path, { method = "GET", body } = {}) {
   return data;
 }
 
-export function homeOf(role) {
-  return role === "teacher" ? "/teacher" : "/student";
-}
-
-// ใส่บนสุดของหน้าที่ต้อง login เช่น requireLogin("teacher")
-// ยังไม่ login → api() ส่งไปหน้า login เอง / login แล้วแต่ผิด role → ส่งกลับหน้าของตัวเอง
-export async function requireLogin(role) {
-  const { user } = await api("/auth/me");
-  if (user.role !== role) {
-    location.href = homeOf(user.role);
-    return new Promise(() => {});
-  }
-  document.body.classList.remove("invisible");
-  return user;
-}
-
-export function initNavbar(user) {
+// ผูกปุ่มออกจากระบบ (ชื่อผู้ใช้ server ใส่ในหน้าให้แล้ว)
+export function initNavbar() {
   document.getElementById("logout-btn").addEventListener("click", async () => {
     try {
       await fetch("/api/auth/logout", { method: "POST" });
@@ -76,10 +61,6 @@ export function initNavbar(user) {
       location.href = "/";
     }
   });
-
-  const name = document.getElementById("nav-name");
-  name.textContent = user.full_name;
-  name.classList.remove("hidden");
 }
 
 export function showError(el, message) {

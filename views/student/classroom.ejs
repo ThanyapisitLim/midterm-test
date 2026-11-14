@@ -1,0 +1,76 @@
+<%
+  const BADGE = {
+    present: { text: "มาเรียน", cls: "bg-emerald-100 text-emerald-700" },
+    pending: { text: "รอตรวจสอบ", cls: "bg-amber-100 text-amber-800" },
+    absent: { text: "ขาด", cls: "bg-zinc-100 text-zinc-600" },
+  };
+%>
+<%- include('../partials/head', { title }) %>
+<body class="min-h-dvh bg-zinc-50 font-sans text-zinc-900">
+  <%- include('../partials/navbar', { user }) %>
+
+  <main class="mx-auto max-w-2xl space-y-6 px-4 py-8">
+    <a href="/student" class="inline-block text-sm text-zinc-500 transition hover:text-zinc-900">← ห้องเรียนทั้งหมด</a>
+
+    <div>
+      <p class="text-xs text-swu-grey"><%= teacherName %></p>
+      <h1 class="mt-1 text-2xl font-semibold"><%= classroom.name %></h1>
+    </div>
+
+    <section class="rounded-xl border border-zinc-200 bg-white p-6">
+      <h2 class="font-medium">เช็คชื่อ</h2>
+      <p id="checkin-status" class="mt-1 text-sm text-zinc-500">กำลังตรวจสอบ…</p>
+
+      <form id="checkin-form" class="mt-5 hidden" novalidate>
+        <label for="code" class="sr-only">รหัสเช็คชื่อ</label>
+        <div class="flex flex-col gap-3 sm:flex-row">
+          <input id="code" name="code" inputmode="numeric" autocomplete="off" maxlength="6" placeholder="รหัส 6 หลักบนจอ"
+            class="block w-full rounded-lg border border-zinc-300 bg-white px-4 py-3 text-center font-mono text-2xl tracking-[0.3em] text-zinc-900 placeholder:font-sans placeholder:text-base placeholder:tracking-normal placeholder:text-zinc-400 focus:border-swu-red focus:ring-2 focus:ring-swu-red/30 focus:outline-none aria-invalid:border-red-500">
+          <button id="send-btn" type="submit"
+            class="shrink-0 rounded-lg bg-swu-red px-6 py-3 text-sm font-medium text-white transition hover:bg-swu-red-dark focus-visible:ring-2 focus-visible:ring-swu-red/40 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50">
+            ส่งรหัส
+          </button>
+        </div>
+        <p id="checkin-error" class="mt-2 text-sm text-red-600"></p>
+      </form>
+    </section>
+
+    <section class="rounded-xl border border-zinc-200 bg-white">
+      <div class="flex flex-wrap items-baseline justify-between gap-2 px-6 pt-6">
+        <h2 class="font-medium">ประวัติการเช็คชื่อ</h2>
+        <% if (history.length > 0) { %>
+        <p class="text-sm text-zinc-500">
+          มาเรียน <span class="font-medium text-zinc-900"><%= summary.present %></span> จาก <%= summary.total %> ครั้ง<% if (summary.pending > 0) { %> · รอตรวจสอบ <%= summary.pending %> ครั้ง<% } %>
+        </p>
+        <% } %>
+      </div>
+      <% if (history.length === 0) { %>
+      <p class="px-6 py-10 text-center text-sm text-zinc-500">ยังไม่มีประวัติการเช็คชื่อ</p>
+      <% } else { %>
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full text-left text-sm">
+          <thead class="border-y border-zinc-200 bg-zinc-50 text-zinc-500">
+            <tr>
+              <th class="px-6 py-3 font-medium">วันที่</th>
+              <th class="px-6 py-3 font-medium">เวลา</th>
+              <th class="px-6 py-3 font-medium">ผล</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-zinc-200">
+            <% for (const h of history) { %>
+            <tr>
+              <td class="px-6 py-3"><%= formatDate(h.started_at) %></td>
+              <td class="px-6 py-3 tabular-nums text-zinc-500"><%= formatTime(h.started_at) %></td>
+              <td class="px-6 py-3"><span class="rounded-full px-2.5 py-0.5 text-xs <%= BADGE[h.status].cls %>"><%= BADGE[h.status].text %></span></td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+      <% } %>
+    </section>
+  </main>
+
+  <script type="module" src="/script/student-classroom.js"></script>
+</body>
+</html>

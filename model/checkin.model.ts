@@ -230,3 +230,23 @@ export async function lastResult(classroomId: number, studentId: number): Promis
   );
   return result.rows[0] ?? null;
 }
+
+export interface HistoryRow {
+  session_id: number;
+  started_at: Date;
+  status: "present" | "suspicious" | null;
+}
+
+// ทุกคาบที่จบแล้วของห้องนี้ นับเฉพาะคาบที่เริ่มหลังนิสิตเข้าห้อง (คาบก่อนเข้าห้องไม่ถือว่าขาด) ล่าสุดก่อน
+export async function listHistoryForStudent(classroomId: number, studentId: number): Promise<HistoryRow[]> {
+  const result = await pool.query<HistoryRow>(
+    `select s.id as session_id, s.started_at, a.status
+     from checkin_sessions s
+     join enrollments e on e.classroom_id = s.classroom_id and e.student_id = $2
+     left join attendance a on a.checkin_session_id = s.id and a.student_id = $2
+     where s.classroom_id = $1 and s.ended_at is not null and s.started_at >= e.joined_at
+     order by s.started_at desc`,
+    [classroomId, studentId]
+  );
+  return result.rows;
+}
