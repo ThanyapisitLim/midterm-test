@@ -1,4 +1,6 @@
-import { pool } from "../database/db";
+import { eq } from "drizzle-orm";
+import { db } from "../database/db";
+import { users } from "../database/schema";
 
 export interface PublicUser {
   id: number;
@@ -11,10 +13,20 @@ export interface User extends PublicUser {
   password_hash: string;
 }
 
-// ใช้ $1 แทนการต่อ string เพื่อกัน SQL injection
+// คอลัมน์ที่ส่งออกไปให้ที่อื่นใช้ (ตั้งชื่อ key เป็น snake_case ให้ตรงกับ interface)
+const publicColumns = {
+  id: users.id,
+  role: users.role,
+  student_code: users.studentCode,
+  full_name: users.fullName,
+};
+
 export async function findByCode(studentCode: string): Promise<User | null> {
-  const result = await pool.query<User>("select * from users where student_code = $1", [studentCode]);
-  return result.rows[0] ?? null;
+  const rows = await db
+    .select({ ...publicColumns, password_hash: users.passwordHash })
+    .from(users)
+    .where(eq(users.studentCode, studentCode));
+  return rows[0] ?? null;
 }
 
 export async function create(
@@ -23,17 +35,14 @@ export async function create(
   fullName: string,
   passwordHash: string
 ): Promise<PublicUser> {
-  const result = await pool.query<PublicUser>(
-    "insert into users (role, student_code, full_name, password_hash) values ($1, $2, $3, $4) returning id, role, student_code, full_name",
-    [role, studentCode, fullName, passwordHash]
-  );
-  return result.rows[0];
+  const rows = await db
+    .insert(users)
+    .values({ role, studentCode, fullName, passwordHash })
+    .returning(publicColumns);
+  return rows[0];
 }
 
 export async function findById(id: number): Promise<PublicUser | null> {
-  const result = await pool.query<PublicUser>(
-    "select id, role, student_code, full_name from users where id = $1",
-    [id]
-  );
-  return result.rows[0] ?? null;
+  const rows = await db.select(publicColumns).from(users).where(eq(users.id, id));
+  return rows[0] ?? null;
 }

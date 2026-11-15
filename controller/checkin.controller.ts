@@ -37,7 +37,7 @@ export async function startCheckin(req: Request, res: Response) {
       const session = await Checkin.createSession(classroom.id, codes);
       res.status(201).json({ session: { id: session.id } });
     } catch (err) {
-      if ((err as { code?: string }).code !== "23505") throw err;
+      if ((err as { cause?: { code?: string } }).cause?.code !== "23505") throw err;
       // กดเริ่มซ้อนกัน มีอีกคำขอสร้างคาบไปก่อนแล้ว
       const again = await Checkin.findOpenByClassroom(classroom.id);
       if (!again) throw err;
@@ -193,7 +193,7 @@ export async function submitCode(req: Request, res: Response) {
     }
 
     const codeId = await Checkin.findCodeId(session.id, code);
-    await Checkin.addLog(session.id, studentId, code, codeId, req.deviceId ?? null);
+    await Checkin.addLog(session.id, studentId, code, codeId);
 
     if (codeId === null) {
       res.status(400).json({ error: "รหัสไม่ถูกต้อง" });

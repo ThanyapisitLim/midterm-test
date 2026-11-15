@@ -62,7 +62,6 @@ create table if not exists checkin_logs (
   student_id         integer not null references users(id) on delete cascade,
   code               text not null,
   code_id            integer references check_codes(id) on delete set null,
-  device_id          text,
   submitted_at       timestamptz not null default now()
 );
 create index if not exists checkin_logs_session_student_idx

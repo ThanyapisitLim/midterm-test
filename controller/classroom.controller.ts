@@ -85,7 +85,7 @@ export async function generateJoinCode(req: Request, res: Response) {
         res.json({ join_code: code });
         return;
       } catch (err) {
-        if ((err as { code?: string }).code !== "23505") throw err;
+        if ((err as { cause?: { code?: string } }).cause?.code !== "23505") throw err;
       }
     }
     res.status(500).json({ error: "สร้างโค้ดไม่สำเร็จ ลองใหม่อีกครั้ง" });
