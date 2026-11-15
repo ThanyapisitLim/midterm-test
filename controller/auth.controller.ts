@@ -190,19 +190,3 @@ export async function logout(req: Request, res: Response) {
     res.status(500).json({ error: "เกิดข้อผิดพลาดในระบบ" });
   }
 }
-
-// GET /api/auth/me
-export async function me(req: Request, res: Response) {
-  try {
-    const user = await User.findById(req.user!.id);
-    if (!user) {
-      clearAuthCookies(res);
-      res.status(401).json({ error: "ไม่พบบัญชีผู้ใช้" });
-      return;
-    }
-    res.json({ user });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "เกิดข้อผิดพลาดในระบบ" });
-  }
-}

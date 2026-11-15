@@ -1,12 +1,6 @@
 import { Router } from "express";
 import { getMyCheckin, startCheckin, submitCode } from "../controller/checkin.controller";
-import {
-  createClassroom,
-  generateJoinCode,
-  getClassroom,
-  joinClassroom,
-  listClassrooms,
-} from "../controller/classroom.controller";
+import { createClassroom, generateJoinCode, joinClassroom } from "../controller/classroom.controller";
 import { requireAuth, requireRole } from "../middleware/auth";
 import { deviceId } from "../middleware/device";
 
@@ -14,10 +8,8 @@ const router = Router();
 
 router.use(requireAuth);
 
-router.get("/", listClassrooms);
 router.post("/", requireRole("teacher"), createClassroom);
 router.post("/join", requireRole("student"), joinClassroom);
-router.get("/:id", getClassroom);
 router.post("/:id/join-code", requireRole("teacher"), generateJoinCode);
 
 router.post("/:id/checkin-sessions", requireRole("teacher"), startCheckin);

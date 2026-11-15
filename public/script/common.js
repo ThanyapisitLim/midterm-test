@@ -62,13 +62,3 @@ export function initNavbar() {
     }
   });
 }
-
-export function showError(el, message) {
-  el.textContent = message;
-  el.classList.remove("hidden");
-}
-
-export function hideError(el) {
-  el.textContent = "";
-  el.classList.add("hidden");
-}

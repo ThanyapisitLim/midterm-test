@@ -30,12 +30,6 @@ export interface ResultRow {
   flag_reason: string | null;
 }
 
-export interface LastResult {
-  session_id: number;
-  started_at: Date;
-  status: "present" | "suspicious" | null;
-}
-
 const SESSION_COLUMNS = "id, classroom_id, started_at, ends_at, ended_at, now() as now";
 
 // ถึงเวลาประเมินผลหรือยัง: หลังรหัสสุดท้ายหมดอายุ + ช่วงผ่อนผัน (ให้คนที่ส่งรหัสสุดท้ายช้าทัน)
@@ -215,20 +209,6 @@ export async function listResult(sessionId: number, classroomId: number): Promis
     [sessionId, classroomId]
   );
   return result.rows;
-}
-
-// ผลของคาบล่าสุดที่จบแล้ว ของนิสิตคนนี้
-export async function lastResult(classroomId: number, studentId: number): Promise<LastResult | null> {
-  const result = await pool.query<LastResult>(
-    `select s.id as session_id, s.started_at, a.status
-     from checkin_sessions s
-     left join attendance a on a.checkin_session_id = s.id and a.student_id = $2
-     where s.classroom_id = $1 and s.ended_at is not null
-     order by s.started_at desc
-     limit 1`,
-    [classroomId, studentId]
-  );
-  return result.rows[0] ?? null;
 }
 
 export interface HistoryRow {

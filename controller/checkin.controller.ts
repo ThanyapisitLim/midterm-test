@@ -206,7 +206,7 @@ export async function submitCode(req: Request, res: Response) {
   }
 }
 
-// GET /api/classrooms/:id/checkin  (นิสิต) ตอนนี้มีการเช็คชื่ออยู่ไหม ส่งรหัสไปแล้วหรือยัง และผลของคาบล่าสุด
+// GET /api/classrooms/:id/checkin  (นิสิต) ตอนนี้มีการเช็คชื่ออยู่ไหม และส่งรหัสไปแล้วหรือยัง
 export async function getMyCheckin(req: Request, res: Response) {
   try {
     const classroomId = Number(req.params.id);
@@ -224,22 +224,7 @@ export async function getMyCheckin(req: Request, res: Response) {
     }
 
     const submitted = session ? await Checkin.hasSubmitted(session.id, studentId) : false;
-    const last = await Checkin.lastResult(classroomId, studentId);
-
-    // นิสิตเห็นแค่ มา / รอตรวจสอบ / ขาด ไม่เห็นเหตุผลที่ถูกทำเครื่องหมาย
-    const statusLabel = { present: "present", suspicious: "pending_review" } as const;
-
-    res.json({
-      open: session !== null,
-      submitted,
-      last_result: last
-        ? {
-            session_id: last.session_id,
-            started_at: last.started_at,
-            status: last.status ? statusLabel[last.status] : "absent",
-          }
-        : null,
-    });
+    res.json({ open: session !== null, submitted });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "เกิดข้อผิดพลาดในระบบ" });

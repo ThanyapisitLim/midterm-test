@@ -67,8 +67,6 @@ create table if not exists checkin_logs (
 );
 create index if not exists checkin_logs_session_student_idx
   on checkin_logs (checkin_session_id, student_id);
-create index if not exists checkin_logs_session_device_idx
-  on checkin_logs (checkin_session_id, device_id);
 
 -- ผลสุดท้ายของแต่ละคน สร้างตอนจบคาบ (ไม่มีแถว = ขาด)
 create table if not exists attendance (
