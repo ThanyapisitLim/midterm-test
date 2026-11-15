@@ -1,3 +1,4 @@
+/// <reference path="./types/express.d.ts" />
 import path from "node:path";
 import cookieParser from "cookie-parser";
 import express from "express";
