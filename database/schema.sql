@@ -78,3 +78,12 @@ create table if not exists attendance (
   checked_at         timestamptz not null default now(),
   unique (checkin_session_id, student_id)
 );
+
+-- นับผู้เข้าชมหน้า Home: 1 ip ต่อ 1 วัน (วันตามเวลาไทย) เก็บเวลาเข้าครั้งแรกกับล่าสุดของวัน
+create table if not exists visits (
+  ip_address     text not null,
+  visit_date     date not null default ((now() at time zone 'Asia/Bangkok')::date),
+  first_visit_at timestamptz not null default now(),
+  last_visit_at  timestamptz not null default now(),
+  primary key (ip_address, visit_date)
+);

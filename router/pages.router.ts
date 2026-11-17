@@ -6,11 +6,12 @@ import {
   teacherClassroom,
   teacherHome,
 } from "../controller/page.controller";
+import { countVisit } from "../middleware/count-visit";
 import { pageAuth } from "../middleware/page-auth";
 
 const router = Router();
 
-router.get("/", guestPage("login", "เข้าสู่ระบบ"));
+router.get("/", countVisit, guestPage("login", "เข้าสู่ระบบ"));
 router.get("/register", guestPage("register", "สมัครสมาชิก"));
 
 router.get("/teacher", pageAuth("teacher"), teacherHome);

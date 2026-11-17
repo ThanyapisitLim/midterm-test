@@ -1,4 +1,6 @@
+import { sql } from "drizzle-orm";
 import {
+  date,
   integer,
   pgTable,
   primaryKey,
@@ -78,3 +80,14 @@ export const attendance = pgTable("attendance", {
   flagReason: text("flag_reason"),
   checkedAt: timestamptz("checked_at").notNull().defaultNow(),
 });
+
+export const visits = pgTable(
+  "visits",
+  {
+    ipAddress: text("ip_address").notNull(),
+    visitDate: date("visit_date").notNull().default(sql`(now() at time zone 'Asia/Bangkok')::date`),
+    firstVisitAt: timestamptz("first_visit_at").notNull().defaultNow(),
+    lastVisitAt: timestamptz("last_visit_at").notNull().defaultNow(),
+  },
+  (t) => [primaryKey({ columns: [t.ipAddress, t.visitDate] })]
+);
