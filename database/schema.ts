@@ -1,4 +1,11 @@
-import { integer, pgTable, primaryKey, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import {
+  integer,
+  pgTable,
+  primaryKey,
+  text,
+  timestamp,
+  uuid,
+} from "drizzle-orm/pg-core";
 
 // บอก Drizzle ว่าตารางหน้าตายังไง (ตารางจริงสร้างจาก schema.sql ในหน้า Neon เหมือนเดิม)
 const timestamptz = (name: string) => timestamp(name, { withTimezone: true });
@@ -34,7 +41,7 @@ export const enrollments = pgTable(
     studentId: integer("student_id").notNull(),
     joinedAt: timestamptz("joined_at").notNull().defaultNow(),
   },
-  (t) => [primaryKey({ columns: [t.classroomId, t.studentId] })]
+  (t) => [primaryKey({ columns: [t.classroomId, t.studentId] })],
 );
 
 export const checkinSessions = pgTable("checkin_sessions", {
